@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { fetchContentful } from '../../../lib/contentful';
+import { ThreeItemNavigationItem } from '../threeItemNavigationItem/threeItemNavigationItem';
 
 interface CategoryImage {
     url: string;
 }
 
-interface NavigationItem {
+export interface NavigationItem {
     categoryName: string;
     isDesktopViewNavigationItem: boolean;
     slug: string;
@@ -19,6 +20,10 @@ interface NavigationData {
         items: NavigationItem[];
     }
 }
+
+type ThreeItemNavigationProps = {
+  isOpen: boolean; 
+};
 
 const GET_NAVIGATION_ITEMS = `
   query{
@@ -37,10 +42,12 @@ navigationItemCollection {
 }
 `;
 
-const ThreeItemNavigation = () => {
+const ThreeItemNavigation: React.FC<ThreeItemNavigationProps> = ({ isOpen }) => {
 
     const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([]);
     const [isLoading, setLoadingStatus] = useState<boolean>(false);
+
+
 
     useEffect(() => {
       const fetchData = async () => {
@@ -48,7 +55,6 @@ const ThreeItemNavigation = () => {
         const data = await fetchContentful<NavigationData>(GET_NAVIGATION_ITEMS);
         setNavigationItems(data.navigationItemCollection.items);
         setLoadingStatus(false);
-        console.log('data', data);
       };
       
       fetchData().catch(console.error);
@@ -56,10 +62,16 @@ const ThreeItemNavigation = () => {
 
   return (
 
-    <div>
+    <div className={`fixed z-40 top-14 left-0 w-full bg-white shadow-lg transition-transform transform ${
+      isOpen ? "translate-x-0" : "-translate-x-full"
+    } h-[calc(100vh-3.5rem)] overflow-y-auto`}>
         {isLoading ? <div>...Loading</div> : <div>
-            
-        ThreeItemNavigation</div> }
+            {navigationItems.map((item, index) => {
+                if (!item.isDesktopViewNavigationItem) {
+              return <ThreeItemNavigationItem key={item.categoryName || index} item={item}/>
+                }
+            } )}
+        </div> }
     </div>
         
   )
