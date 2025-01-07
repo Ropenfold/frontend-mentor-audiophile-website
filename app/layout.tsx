@@ -5,6 +5,7 @@ import { Provider, useSelector } from 'react-redux';
 import store, { RootState } from '../redux/store';
 import ModalBackgroundLayer from "./components/modalBackgroundLayer/modalBackgroundLayer";
 import ThreeItemNavigation from "./components/threeItemNavigation/threeItemNavigation";
+import { Footer } from "./components/footer/footer";
 
 
 export default function RootLayout({
@@ -12,13 +13,16 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
-      <body><Provider store={store}>
+      <body className="relative">
+        <Provider store={store}>
         <Header />
-        <ThreeItemNavigation />
+        <ConnectedThreeItemNavigation />
         <ConnectedModalBackgroundLayer />
         {children}
+        <Footer />
         </Provider>
       </body>
     </html>
@@ -29,4 +33,10 @@ function ConnectedModalBackgroundLayer() {
   const isVisible = useSelector((state: RootState) => state.menu.background);
   console.log('isVisible', isVisible);
   return <ModalBackgroundLayer visible={isVisible} />;
+}
+
+function ConnectedThreeItemNavigation() {
+  const isOpen = useSelector((state: RootState) => state.menu.openMenu);
+  console.log('isVisible', isOpen);
+  return <ThreeItemNavigation isOpen={isOpen} />;
 }
