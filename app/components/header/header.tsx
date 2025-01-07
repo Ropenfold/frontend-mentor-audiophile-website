@@ -4,29 +4,8 @@ import React, { useEffect, useState } from 'react'
 import { fetchContentful } from '../../../lib/contentful';
 import HamburgerMenu from '../hamburgerMenu/hamburgerMenu';
 import Image from 'next/image';
+import { NavigationItem, NavigationData } from '@/redux/types/navigationTypes'; 
 
-interface CategoryImage {
-    url: string;
-}
-
-interface NavigationItem {
-    categoryName: string;
-    isDesktopViewNavigationItem: boolean;
-    slug: string;
-    categoryImageCollection: {
-        items: CategoryImage[];
-    };
-}
-
-interface NavigationData {
-    navigationItemCollection: {
-        items: NavigationItem[];
-    }
-}
-
-interface PageProps {
-    navigationItems: NavigationItem[];
-}
 
 const GET_NAVIGATION_ITEMS = `
   query{
@@ -48,6 +27,7 @@ navigationItemCollection {
 const Header = () => {
 
     const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([]);
+    console.log('navigationItems', navigationItems);
 
     useEffect(() => {
       const fetchData = async () => {
@@ -60,7 +40,7 @@ const Header = () => {
 
     
   return (
-    <div className='relative bg-black h-16 content-center z-50'>
+    <div className='fixed bg-black h-16 content-center z-50'>
       <div className='flex h-5 w-screen justify-between'>
       <HamburgerMenu />
       <h1 className='text-white'>audiophile</h1>
