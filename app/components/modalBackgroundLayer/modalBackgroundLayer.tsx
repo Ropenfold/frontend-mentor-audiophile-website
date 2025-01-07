@@ -22,7 +22,7 @@ const ModalBackgroundLayer: React.FC<ModalBackgroundLayerProps> = ({visible}) =>
 
   return (
     <div onClick={() => close(isVisible)} className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ${
-    visible ? 'opacity-100 z-40' : 'opacity-0 pointer-events-none'
+    visible ? 'opacity-100 z-30' : 'opacity-0 pointer-events-none'
     }`} />
   )
 }
